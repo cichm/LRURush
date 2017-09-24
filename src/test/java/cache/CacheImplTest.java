@@ -6,8 +6,8 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 public class CacheImplTest {
-    @Test
-    public void assertEqualsIfsimilarItemsTest() {
+    @Test(groups = "fast")
+    public void similarItems() {
         Cache cache = CacheImpl.get();
         cache.cacheItem(1, "1");
         cache.cacheItem(2, "2");
@@ -17,16 +17,17 @@ public class CacheImplTest {
         assertEquals(cache.getView().getItem(0), cacheItem);
     }
 
-    @Test
-    public void invalidateCacheMustClearCacheTest() {
+    @Test(groups = "fast")
+    public void invalidateCacheTest() {
         Cache cache = CacheImpl.get();
+        cache.cacheItem(1, "1");
 
         cache.invalidateCache();
         assertEquals(cache.getView().size(), 0);
     }
 
-    @Test
-    public void onlyThreeValuesAreAvailableTest() {
+    @Test(groups = "fast")
+    public void checkIfOnlyThreeValuesAreAvailable() {
         Cache cache = CacheImpl.get();
         cache.cacheItem(1, "1");
         cache.cacheItem(2, "2");
@@ -38,30 +39,16 @@ public class CacheImplTest {
         assertEquals(cache.getView().getItem(0), cacheItem);
     }
 
-    @Test
-    public void noCacheEntryExceptionsIfNumberIndexIsGraderThanThreeTest() {
+    @Test(groups = "fast")
+    public void checkIfReturnsNullWhenAskedForNonexistentEntry() {
         Cache cache = CacheImpl.get();
         cache.cacheItem(1, "1");
 
-        cache.getView().getItem(4);
+        assertNull(cache.getView().getItem(4));
     }
 
     @Test
-    public void clearCacheTest() {
-        Cache cache = CacheImpl.get();
-        cache.cacheItem(1, "1");
-
-        CacheItem cacheItem = cache.cacheItem(1, "1");
-
-        assertEquals(cache.getView().getItem(0), cacheItem);
-
-        cache.invalidateCache();
-
-        assertNull(cache.getView().getItem(0));
-    }
-
-    @Test
-    public void getObjectByValueShouldBeReturnTest() {
+    public void getObjectByValue() {
         Cache cache = CacheImpl.get();
         cache.cacheItem(1, "1");
         cache.cacheItem(2, "2");
@@ -75,7 +62,7 @@ public class CacheImplTest {
     }
 
     @Test
-    public void noCacheEntryExceptionsIfGetOldElementTest() {
+    public void noCacheEntryExceptionsIfGetOldElement() {
         Cache cache = CacheImpl.get();
         cache.cacheItem(1, "1");
         cache.cacheItem(2, "2");
@@ -83,6 +70,6 @@ public class CacheImplTest {
         CacheItem cacheItem = cache.cacheItem(3, "3");
         cache.cacheItem(4, "4");
 
-       cache.getView().getItem("1");
+        cache.getView().getItem("1");
     }
 }
